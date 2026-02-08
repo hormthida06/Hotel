@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Deluxe King Room — Rosewood Phnom Penh | LuxeStay</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" th:href="@{/css/room.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/calender.css}">
+</head>
+<body>
+
+<!-- Navbar -->
+<th:block th:replace="layout/header.html :: header"></th:block>
+
+<!-- Main Content -->
+<section class="py-5" style="margin-top: 150px; margin-bottom: 50px;">
+
+    <section id="booking" class="py-5 bg-light mt-5 mt-5 pt-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="booking-form">
+                        <div class="row g-3">
+                            <div class="search-bar-container">
+                                <div class="search-bar d-flex align-items-stretch">
+
+                                    <div class="search-field flex-grow-1">
+                                        <label>Destination</label>
+                                        <input type="text" th:value="${hotel.name}"  placeholder="Where are you going?" id="destination">
+                                    </div>
+
+                                    <div class="search-field flex-grow-1">
+                                        <label>Dates</label>
+                                        <input type="text" class="date-range" placeholder="Add dates">
+                                    </div>
+
+                                    <input type="hidden" id="globalCheckIn">
+                                    <input type="hidden" id="globalCheckOut">
+
+                                    <!-- Guests - improved structure -->
+                                    <div class="search-field dropdown position-static">
+                                        <label><i class="bi bi-people-fill me-1"></i> Guests</label>
+
+                                        <button type="button"
+                                                class="guests-trigger"
+                                                id="guestsSummary"
+                                                data-bs-toggle="dropdown"
+                                                data-bs-auto-close="outside"
+                                                aria-expanded="false">
+                                            1 adult · 0 children · 1 room
+                                        </button>
+
+                                        <div class="dropdown-menu guests-dropdown shadow-lg">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <div>
+                                                    <h6 class="fw-bold mb-0">Adults</h6>
+                                                    <small class="text-muted">Ages 18+</small>
+                                                </div>
+                                                <div class="input-group input-group-sm w-50">
+                                                    <button class="btn btn-outline-secondary decrement" data-type="adults">−</button>
+                                                    <input type="number" class="form-control text-center" id="adultsCount" value="1" readonly>
+                                                    <button class="btn btn-outline-secondary increment" data-type="adults">+</button>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <div>
+                                                    <h6 class="fw-bold mb-0">Children</h6>
+                                                    <small class="text-muted">Ages 0–17</small>
+                                                </div>
+                                                <div class="input-group input-group-sm w-50">
+                                                    <button class="btn btn-outline-secondary decrement" data-type="children">−</button>
+                                                    <input type="number" class="form-control text-center" id="childrenCount" value="0" readonly>
+                                                    <button class="btn btn-outline-secondary increment" data-type="children">+</button>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                                <h6 class="fw-bold mb-0">Rooms</h6>
+                                                <div class="input-group input-group-sm w-50">
+                                                    <button class="btn btn-outline-secondary decrement" data-type="rooms">−</button>
+                                                    <input type="number" class="form-control text-center" id="roomsCount" value="1" readonly>
+                                                    <button class="btn btn-outline-secondary increment" data-type="rooms">+</button>
+                                                </div>
+                                            </div>
+
+                                            <button class="btn btn-primary w-100 done-btn">Done</button>
+                                        </div>
+                                    </div>
+
+                                    <button class="btn-search">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" th:text="${hotel.name}">Hotels</a></li>
+                <li class="breadcrumb-item"><a href="#" th:text="${hotel.country}">Rosewood Phnom Penh</a></li>
+                <li class="breadcrumb-item active" aria-current="page" th:text="${room.type}">Deluxe King Room</li>
+            </ol>
+        </nav>
+
+        <p class="text-muted mb-1">
+            <i class="fas fa-map-marker-alt me-2"></i>
+        <div th:text="${hotel.address}">Address</div>
+        </p>
+
+        <div class="row g-5">
+
+            <!-- Left Column - Gallery + Description -->
+            <div class="col-lg-8">
+
+                <!-- Main Gallery -->
+                <div class="mb-4">
+                    <img id="mainImage"
+                         th:if="${room.images != null and !room.images.isEmpty()}"
+                         th:src="${room.images[0].imageUrl}"
+                         class="gallery-main w-100 mb-3"
+                         alt="Room Image"/>
+
+                    <img id="mainImage"
+                         th:if="${room.images == null or room.images.isEmpty()}"
+                         th:src="@{/img/photos/No-img.jpg}"
+                         class="gallery-main w-100 mb-3"
+                         alt="No Image"/>
+
+                    <!-- Thumbnails -->
+                    <div class="row g-3">
+                        <div th:if="${room.images != null and !room.images.isEmpty()}" class="d-flex flex-wrap">
+                            <div th:each="img : ${room.images}" style="margin-right:5px; margin-bottom:5px;">
+                                <img th:src="${img.imageUrl}"
+                                     class="gallery-thumb w-100"
+                                     th:attr="data-full=${img.imageUrl}"
+                                     alt="Room Image"
+                                     style="width:80px; cursor:pointer;">
+                            </div>
+                        </div>
+
+                        <!-- No images fallback -->
+                        <img th:if="${room.images == null or room.images.isEmpty()}"
+                             th:src="@{/img/photos/No-img.jpg}"
+                             class="gallery-thumb w-100"
+                             alt="No Image"
+                             style="width:80px;">
+
+                    </div>
+
+                </div>
+
+                <!-- Room Info -->
+                <h1 class="fw-bold mb-2" th:text="${room.type}">Deluxe King Room</h1>
+                <div class="d-flex align-items-center gap-4 mb-4 flex-wrap">
+                    <div><span class="fs-4">★★★★★</span> <small class="text-muted">Excellent • 1,284 reviews</small></div>
+                    <i class="bi bi-people-fill me-1"></i>
+                    <span th:text="${room.capacity}"></span> guests
+
+                    <div><i class="bi bi-square me-1"></i>38 m²</div>
+                </div>
+
+                <p class="lead mb-4" th:text="${room.description}">
+                    Experience contemporary luxury with panoramic city views, signature Rosewood design, and thoughtful amenities in the heart of Phnom Penh.
+                </p>
+
+                <h4 class="fw-bold mb-3">Room Highlights</h4>
+                <div class="row g-3 mb-5">
+                    <div class="col-md-4"><div class="room-feature text-center"><i class="bi bi-bed-fill fs-3 mb-2"></i><h6>King-size bed</h6></div></div>
+                    <div class="col-md-4"><div class="room-feature text-center"><i class="bi bi-window fs-3 mb-2"></i><h6>Floor-to-ceiling windows</h6></div></div>
+                    <div class="col-md-4"><div class="room-feature text-center"><i class="bi bi-cup-hot fs-3 mb-2"></i><h6>Nespresso coffee machine</h6></div></div>
+                </div>
+
+                <!-- Amenities -->
+                <h4 class="fw-bold mb-4">Amenities</h4>
+                <div class="row g-4 mb-5">
+                    <div class="col-6 col-md-4 col-lg-3 text-center">
+                        <div class="amenity-icon mx-auto mb-2"><i class="bi bi-wifi-2"></i></div>
+                        <small>High-speed Wi-Fi</small>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3 text-center">
+                        <div class="amenity-icon mx-auto mb-2"><i class="bi bi-airplane"></i></div>
+                        <small>Air conditioning</small>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3 text-center">
+                        <div class="amenity-icon mx-auto mb-2"><i class="bi bi-safe2"></i></div>
+                        <small>In-room safe</small>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-3 text-center">
+                        <div class="amenity-icon mx-auto mb-2"><i class="bi bi-tv"></i></div>
+                        <small>55" Smart TV</small>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column - Booking Widget -->
+            <div class="col-lg-4">
+
+                <div class="card border-0 shadow-lg sticky-top" style="top: 90px; border-radius: 16px; overflow: hidden;">
+
+                    <div class="card-body p-4 p-lg-5">
+
+                        <div class="d-flex justify-content-between align-items-baseline mb-4">
+                            <div>
+                                <span class="price-display" th:text="'$'+ ${room.price}">$238</span>
+                                <small class="text-muted d-block">/ night</small>
+                            </div>
+                            <div class="text-end">
+                                <small class="text-success fw-bold">Best Price Guarantee</small>
+                            </div>
+                        </div>
+
+                        <!-- Booking Form -->
+                        <form action="/booking/detail" method="get">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Check-in / Check-out</label>
+                                <input type="text" class="date-range form-control form-control-lg" placeholder="Add dates">
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Guests</label>
+                                <select class="form-select form-select-lg">
+                                    <option selected>2 Adults • 0 Children</option>
+                                    <option>1 Adult</option>
+                                    <option>2 Adults • 1 Child</option>
+                                </select>
+                            </div>
+
+                            <!-- Hidden inputs MUST be inside the form -->
+                            <input type="hidden" name="roomId" th:value="${room.id}">
+                            <input type="hidden" name="price" th:value="${room.price}">
+                            <input type="hidden" name="checkIn" class="checkin">
+                            <input type="hidden" name="checkOut" class="checkout">
+
+                            <button type="submit" class="btn btn-book text-white w-100 py-3 fw-bold mb-3">
+                                Check Availability & Book
+                            </button>
+
+                            <small class="text-muted d-block text-center">
+                                No payment needed today • Free cancellation until 18 Jan
+                            </small>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<th:block th:replace="layout/footer.html :: footer"></th:block>
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // ================= GALLERY =================
+        document.querySelectorAll('.gallery-thumb').forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                const mainImage = document.getElementById('mainImage');
+                if (mainImage) {
+                    mainImage.src = this.dataset.full || this.src;
+                }
+            });
+        });
+
+        const datePicker = flatpickr(".date-range", {
+            mode: "range",
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            defaultDate: [
+                new Date(),
+                new Date(new Date().setDate(new Date().getDate() + 1))
+            ],
+            onChange: function(selectedDates) {
+                if (selectedDates.length === 2) {
+                    const checkIn = selectedDates[0].toISOString().split('T')[0];
+                    const checkOut = selectedDates[1].toISOString().split('T')[0];
+
+                    document.querySelector(".checkin").value = checkIn;
+                    document.querySelector(".checkout").value = checkOut;
+
+                    // Show in input
+                    document.querySelector(".date-range").value = checkIn + " - " + checkOut;
+                }
+            }
+        });
+
+        // On form submit, fill hidden inputs if user did not pick dates
+        document.querySelector('form[action="/booking/detail"]').addEventListener('submit', function () {
+            const checkinInput = this.querySelector('.checkin');
+            const checkoutInput = this.querySelector('.checkout');
+
+            if (!checkinInput.value || !checkoutInput.value) {
+                const today = new Date();
+                const tomorrow = new Date(today);
+                tomorrow.setDate(today.getDate() + 1);
+
+                checkinInput.value = today.toISOString().split('T')[0];
+                checkoutInput.value = tomorrow.toISOString().split('T')[0];
+            }
+        });
+    });
+</script>
+
+
+</body>
+</html>

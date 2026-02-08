@@ -1,0 +1,32 @@
+<th:block th:fragment="admin-sidebar">
+
+    <div class="sidebar" id="sidebar">
+        <div class="p-4 text-center border-bottom border-secondary">
+            <a class="navbar-brand" href="#">
+                <h4 class="fw-bold mb-0">Luxe<span class="text-warning">Haven</span></h4>
+            </a>
+            <small>Admin Panel</small>
+        </div>
+
+        <div class="nav flex-column mt-3">
+            <a href="/dashboard" class="nav-link"><i class="bi bi-speedometer2 me-3"></i> Dashboard</a>
+            <a href="/hotel/list" class="nav-link"><i class="bi bi-building me-3"></i> Hotels</a>
+            <a href="/room/list" class="nav-link"><i class="bi bi-door-open me-3"></i> Rooms</a>
+            <a href="/booking/list" class="nav-link"><i class="bi bi-calendar-check me-3"></i> Bookings</a>
+            <a href="/payment/list" class="nav-link"><i class="bi bi-currency-dollar me-3"></i> Payments</a>
+            <a href="/users/list" class="nav-link"><i class="bi bi-person-badge me-3"></i> Users</a>
+            <a href="/logout" class="nav-link"><i class="bi bi-box-arrow-right me-3"></i> Logout</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.toggle('active', link.getAttribute('href') === currentPath);
+            });
+        });
+    </script>
+
+
+</th:block>

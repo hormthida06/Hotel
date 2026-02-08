@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Add New Room — LuxeStay Admin</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/create.css}">
+</head>
+<body>
+
+<!-- Sidebar (same as previous admin dashboard) -->
+<th:block th:replace="layout/admin-sideBar :: admin-sidebar"></th:block>
+
+<!-- Main Content -->
+<div class="main-content">
+
+    <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+        <div>
+            <h2 class="fw-bold mb-1">Add New Room</h2>
+            <small class="text-muted">Create a new room for any of your hotels</small>
+        </div>
+        <a href="/room/list" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i> Back to Rooms List
+        </a>
+    </div>
+
+    <div class="form-card mx-auto" style="max-width: 920px;">
+
+        <div class="form-card mx-auto" style="max-width: 920px;">
+
+            <form th:action="@{'/room/update/' + ${room.id}}" method="post" enctype="multipart/form-data">
+
+                <!-- Messages -->
+                <div th:if="${success}" class="alert alert-success">[[${success}]]</div>
+                <div th:if="${error}" class="alert alert-danger">[[${error}]]</div>
+
+                <!-- Hotel -->
+                <div class="mb-4">
+                    <label class="form-label">Select Hotel</label>
+                    <select class="form-select form-select-lg" name="hotel_id" required>
+                        <option value="" disabled>Select hotel...</option>
+                        <option th:each="hotel : ${hotels}"
+                                th:value="${hotel.id}"
+                                th:selected="${hotel.id == room.hotel.id}"
+                                th:text="${hotel.name}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="row g-4">
+
+                    <!-- Room Number -->
+                    <div class="col-md-6">
+                        <label class="form-label">Room Number</label>
+                        <input type="text" name="room_number" th:value="${room.roomNumber}" class="form-control form-control-lg" required>
+                    </div>
+
+                    <!-- Room Type -->
+                    <div class="col-md-6">
+                        <label class="form-label">Room Type</label>
+                        <select class="form-select form-select-lg" name="room_type" required>
+                            <option value="" disabled>Select type...</option>
+                            <option value="Single" th:selected="${room.type.name() == 'Single'}">Single</option>
+                            <option value="Double" th:selected="${room.type.name() == 'Double'}">Double</option>
+                            <option value="Suite" th:selected="${room.type.name() == 'Suite'}">Suite</option>
+                            <option value="Deluxe" th:selected="${room.type.name() == 'Deluxe'}">Deluxe</option>
+                            <option value="Executive" th:selected="${room.type.name() == 'Executive'}">Executive</option>
+                            <option value="JuniorSuite" th:selected="${room.type.name() == 'JuniorSuite'}">Junior Suite</option>
+                            <option value="Presidential" th:selected="${room.type.name() == 'Presidential'}">Presidential</option>
+                        </select>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="col-md-6">
+                        <label class="form-label">Price (USD)</label>
+                        <input type="number" name="price" th:value="${room.price}" class="form-control form-control-lg" step="0.01" required>
+                    </div>
+
+                    <!-- Max Guests -->
+                    <div class="col-md-6">
+                        <label class="form-label">Max Guests</label>
+                        <input type="number" name="capacity" th:value="${room.capacity}" class="form-control form-control-lg" min="1" max="10" required>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="col-md-6">
+                        <label class="form-label">Status</label>
+                        <select class="form-select form-select-lg" name="status">
+                            <option value="Available" th:selected="${room.status.name() == 'Available'}">Available</option>
+                            <option value="Maintenance" th:selected="${room.status.name() == 'Maintenance'}">Maintenance</option>
+                            <option value="Booked" th:selected="${room.status.name() == 'Booked'}">Booked</option>
+                        </select>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="col-12">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" name="description" rows="5" th:text="${room.description}"></textarea>
+                    </div>
+
+                    <!-- Room Images -->
+                    <div class="col-12">
+                        <label class="form-label">Room Images</label>
+                        <input type="file" name="images" class="form-control form-control-lg" accept="image/*" multiple>
+                        <div class="text-center mt-3">
+                            <img id="imagePreview" class="img-thumbnail d-none" style="max-height:200px">
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Amenities -->
+                <div class="mt-5">
+                    <label class="form-label d-block mb-3">Amenities</label>
+                    <div class="row g-3">
+                        <div class="col-md-4 col-lg-3" th:each="amenity : ${amenities}">
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="amenityIds"
+                                       th:id="'amenity-' + ${amenity.id}"
+                                       th:value="${amenity.id}"
+                                       th:checked="${#lists.contains(room.amenities.?[id == amenity.id], amenity)}">
+                                <label class="form-check-label"
+                                       th:for="'amenity-' + ${amenity.id}"
+                                       th:text="${amenity.name}"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Submit -->
+                <div class="mt-5 text-end">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="bi bi-save me-2"></i> Update Room
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Simple image preview -->
+<script>
+    document.querySelector('input[type="file"]').addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = ev => {
+            const img = document.getElementById('imagePreview');
+            img.src = ev.target.result;
+            img.classList.remove('d-none');
+        };
+        reader.readAsDataURL(file);
+    });
+</script>
+
+
+</body>
+</html>

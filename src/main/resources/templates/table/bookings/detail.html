@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Complete Your Booking — Rosewood Phnom Penh | LuxeStay</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/booking.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+<body>
+
+<!-- Navbar -->
+<th:block th:replace="layout/header.html :: header"></th:block>
+
+<!-- Progress Steps -->
+<div class="container pt-5 pb-4" style="margin-top: 150px; margin-bottom: 50px;">
+    <div class="step-indicator">
+        <div class="step">
+            <div class="step-number">1</div>
+            <small>Room Selection</small>
+        </div>
+        <div class="step active">
+            <div class="step-number">2</div>
+            <small>Your Details</small>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <small>Confirmation</small>
+        </div>
+    </div>
+</div>
+
+<!-- Main Booking Content -->
+<section class="pb-5">
+    <div class="container">
+        <div class="row g-5">
+
+            <!-- Left - Guest & Payment Info -->
+            <div class="col-lg-7">
+
+                <h3 class="fw-bold mb-4">Your Booking Details</h3>
+
+                <!-- Guest Information -->
+                <div class="guest-info-box mb-4">
+                    <h5 class="fw-bold mb-3">Guest Information</h5>
+                    <div class="row g-3">
+                        <!-- SUCCESS MESSAGE -->
+                        <div th:if="${success}" class="alert alert-success">
+                            [[${success}]]
+                        </div>
+
+                        <!-- ERROR MESSAGE -->
+                        <div th:if="${error}" class="alert alert-danger">
+                            [[${error}]]
+                        </div>
+
+                        <form action="/booking/info" method="post" class="row g-3">
+
+                            <!-- REQUIRED booking data -->
+                            <input type="hidden" name="price" th:value="${totalPrice}">
+                            <input type="hidden" name="roomId" th:value="${roomId}">
+                            <input type="hidden" name="checkIn" th:value="${#dates.format(checkIn,'yyyy-MM-dd')}">
+                            <input type="hidden" name="checkOut" th:value="${#dates.format(checkOut,'yyyy-MM-dd')}">
+
+<!--                            <p>RoomId: <span th:text="${roomId}">roomId here</span></p>-->
+<!--                            <p>Price: <span th:text="${totalPrice}">price here</span></p>-->
+<!--                            <p>CheckIn: <span th:text="${checkIn}">checkIn here</span></p>-->
+<!--                            <p>CheckOut: <span th:text="${checkOut}">checkOut here</span></p>-->
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">First Name</label>
+                                <input type="text" name="first_name"
+                                       class="form-control"
+                                       th:value="${user != null ? #strings.substringBefore(user.fullName, ' ') : ''}"
+                                       th:readonly="${readonly}">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Last Name</label>
+                                <input type="text" name="last_name"
+                                       class="form-control"
+                                       th:value="${user != null ? #strings.substringAfter(user.fullName, ' ') : ''}"
+                                       th:readonly="${readonly}">
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Gender</label>
+                                <select class="form-select" name="gender" th:disabled="${readonly}">
+                                    <option value="male" th:selected="${user?.profile?.gender=='male'}">Male</option>
+                                    <option value="female" th:selected="${user?.profile?.gender=='female'}">Female</option>
+                                    <option value="other" th:selected="${user?.profile?.gender=='other'}">Other</option>
+                                </select>
+
+<!--                                <input type="hidden" name="gender"-->
+<!--                                       th:if="${readonly}"-->
+<!--                                       th:value="${user?.profile?.gender}">-->
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Email Address</label>
+                                <input type="email" name="email"
+                                       class="form-control"
+                                       th:value="${user != null ? user.email : ''}"
+                                       th:readonly="${readonly}">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Phone Number</label>
+                                <input type="tel" name="phone"
+                                       class="form-control"
+                                       th:value="${user != null ? user.phone : ''}"
+                                       th:readonly="${readonly}">
+                            </div>
+
+                            <input type="hidden" name="userId" th:if="${user != null}" th:value="${user.id}">
+                            <input type="hidden" name="status" th:value="${user != null ? user.status : 'inactive'}">
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Country</label>
+                                <select class="form-select" name="country" th:disabled="${readonly}">
+                                    <option value="Cambodia" th:selected="${user?.profile?.country=='Cambodia'}">Cambodia</option>
+                                    <option value="Vietnam" th:selected="${user?.profile?.country=='Vietnam'}">Vietnam</option>
+                                    <option value="Singapore" th:selected="${user?.profile?.country=='Singapore'}">Singapore</option>
+                                    <option value="Other" th:selected="${user?.profile?.country=='Other'}">Other</option>
+                                </select>
+
+<!--                                <input type="hidden" name="country"-->
+<!--                                       th:if="${readonly}"-->
+<!--                                       th:value="${user?.profile?.country}">-->
+
+                            </div>
+
+                            <button type="submit" class="btn btn-pay text-white w-100 mb-3 mt-5">
+                                Pay Now • Secure Booking
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="specialRequests" checked>
+                            <label class="form-check-label" for="specialRequests">
+                                I have special requests (late check-in, extra bed, etc.)
+                            </label>
+                        </div>
+                        <textarea class="form-control mt-2" rows="2" placeholder="Example: Arriving after 10 PM, need late check-in..."></textarea>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right - Booking Summary -->
+            <div class="col-lg-5">
+                <div class="booking-summary">
+
+                    <div class="summary-header">
+                        <h4 class="mb-1 fw-bold" th:text="${room.type}">Deluxe King Room</h4>
+                        <div class="text-detail" style="display: flex; gap: 10px">
+                            <p class="mb-0" th:text="${hotel.address}">Rosewood Phnom Penh</p>
+                            <p class="mb-0" th:text="'•'+${nights} + ' nights'">5 nights</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4">
+                        <div class="d-flex justify-content-between mb-3">
+                            <div>
+                                <strong>Check-in:</strong><br>
+                                <span th:text="${#dates.format(checkIn, 'dd MMM yyyy')} + ' (after 15:00)'">20 Jan 2026 (after 15:00)</span>
+                            </div>
+                            <div class="text-end">
+                                <strong>Check-out:</strong><br>
+                                <span th:text="${#dates.format(checkOut, 'dd MMM yyyy')} + ' (before 12:00)'">25 Jan 2026 (before 12:00)</span>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="price-breakdown mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span th:text="${nights} + ' nights × $' + ${room.price}">5 nights × $238</span>
+                                <span th:text="'$' + ${totalPrice}">$1,190</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Service fee</span>
+                                <span th:text="'$'+ ${fee}">$5</span>
+                            </div>
+<!--                            <div class="d-flex justify-content-between mb-2 text-success">-->
+<!--                                <span>SUMMER20 discount (20%)</span>-->
+<!--                                <span>-$238</span>-->
+<!--                            </div>-->
+                            <hr class="my-3">
+                            <div class="d-flex justify-content-between fs-5 fw-bold">
+                                <span>Total</span>
+                                <span class="text-primary" th:text="'$' + ${totalPrice+fee}">$1,000</span>
+                            </div>
+                            <small class="text-muted d-block mt-1">All prices include taxes</small>
+                        </div>
+
+                        <div class="text-center">
+                            <small class="text-muted">You won't be charged yet • Free cancellation until 18 Jan 2026</small>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Hotel small info -->
+                <div class="mt-4 text-center">
+                    <small class="text-muted">
+                        <i class="bi bi-shield-lock-fill me-1"></i>
+                        Your booking is protected by LuxeStay secure payment system
+                    </small>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<th:block th:replace="layout/footer.html :: footer"></th:block>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+
+:root {
+    --primary: #2c7d4e;
+    --light-bg: #f8f9fa;
+}
+
+.hero-section {
+    background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2073&q=80') center/cover no-repeat;
+    color: white;
+    padding: 8rem 0 6rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
+.score-badge {
+    background-color: var(--primary);
+    color: white;
+    padding: 0.35rem 0.9rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+.card-img-overlay-text {
+    background: rgba(0,0,0,0.5);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+}
+.gallery-img {
+    height: 220px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.25s;
+}
+.gallery-img:hover {
+    transform: scale(1.04);
+}
+.feature-icon {
+    font-size: 1.8rem;
+    color: var(--primary);
+}
+.review-quote {
+    font-style: italic;
+    border-left: 4px solid var(--primary);
+    padding-left: 1.2rem;
+}

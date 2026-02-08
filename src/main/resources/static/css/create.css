@@ -1,0 +1,54 @@
+
+:root {
+    --primary: #2c5282;
+    --primary-dark: #1a365d;
+    --accent: #ed8936;
+    --light: #f8fafc;
+}
+
+.main-content {
+    margin-left: 260px;
+    padding: 2.5rem;
+}
+
+.form-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    padding: 2.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #334155;
+}
+
+.input-group-text {
+    background: #f1f5f9;
+}
+
+.preview-img {
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px dashed #cbd5e1;
+    margin-top: 1rem;
+}
+
+.btn-save {
+    background: var(--accent);
+    border: none;
+    padding: 12px 2.5rem;
+    font-weight: 600;
+    border-radius: 50px;
+}
+
+.btn-save:hover {
+    background: #e67e22;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 992px) {
+    .sidebar { width: 0; overflow: hidden; }
+    .main-content { margin-left: 0; }
+}

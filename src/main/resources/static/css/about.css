@@ -1,0 +1,38 @@
+:root {
+    --primary: #2c5282;
+    --primary-dark: #1a365d;
+    --accent: #ed8936;
+    --light: #f8fafc;
+}
+
+.hero-section {
+    background: linear-gradient(rgba(26,54,93,0.85), rgba(44,82,130,0.85)),
+    url('https://images.unsplash.com/photo-1564507592333-c3f5b6f5c4f2?auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 9rem 0 7rem;
+    text-align: center;
+}
+
+.mission-card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.mission-card:hover { transform: translateY(-10px); }
+
+.team-member {
+    text-align: center;
+}
+
+.team-img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid white;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}

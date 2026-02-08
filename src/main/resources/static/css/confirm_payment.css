@@ -1,0 +1,61 @@
+
+:root {
+    --primary: #2c7d4e;
+    --light-bg: #f8f9fa;
+    --success: #198754;
+}
+
+.confirm-header {
+    background: linear-gradient(135deg, var(--primary) 0%, #1e5c38 100%);
+    color: white;
+    padding: 5rem 0 3rem;
+    text-align: center;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+.summary-card, .payment-card {
+    border: none;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border-radius: 1rem;
+    overflow: hidden;
+}
+.qr-box {
+    background: white;
+    border: 2px dashed var(--primary);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+}
+.qr-placeholder {
+    width: 220px;
+    height: auto;
+    margin: 1rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: #6c757d;
+    border-radius: 0.8rem;
+}
+.payment-option {
+    border: 2px solid #dee2e6;
+    border-radius: 0.8rem;
+    padding: 1.2rem;
+    margin-bottom: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.payment-option.active {
+    border-color: var(--primary);
+    background-color: #e8f5ee;
+}
+.payment-option:hover {
+    border-color: var(--primary);
+}
+.paypal-btn {
+    background-color: #ffc107;
+    color: #000;
+    font-weight: bold;
+}
+.paypal-btn:hover {
+    background-color: #e0a800;
+}
